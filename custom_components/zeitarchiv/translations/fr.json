@@ -1,0 +1,211 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurer Zeitarchiv",
+        "description": "Connexion à un module complémentaire Zeitarchiv. Plusieurs destinations nommées peuvent fonctionner en parallèle, par exemple production et test. Le jeton d'API se trouve dans les paramètres du module complémentaire.",
+        "data": {
+          "name": "Nom de la connexion",
+          "host": "Hôte",
+          "port": "Port",
+          "api_token": "Jeton d'API"
+        }
+      },
+      "reconfigure": {
+        "title": "Zeitarchiv – Modifier la connexion",
+        "description": "Mettez à jour l'hôte, le port et le jeton — par exemple si le jeton a été régénéré ou supprimé dans les paramètres du module complémentaire (section « Connexion »).",
+        "data": {
+          "name": "Nom de la connexion",
+          "host": "Hôte",
+          "port": "Port",
+          "api_token": "Jeton d'API"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Zeitarchiv – Jeton refusé",
+        "description": "Le module complémentaire a refusé le jeton d'API enregistré — il a probablement été régénéré ou supprimé dans ses paramètres (section « Connexion »). Saisissez le nouveau jeton.",
+        "data": {
+          "api_token": "Jeton d'API"
+        }
+      },
+      "reauth_confirm_demo_warning": {
+        "title": "Zeitarchiv – la cible fonctionne en mode démo",
+        "description": "Le nouveau jeton appartient à une instance qui fonctionne actuellement en mode démo — probablement parce que l'application a été basculée alors que « {connection} » utilisait encore l'ancien jeton. L'utiliser quand même ? Si vous annulez, le jeton précédent reste inchangé et fonctionnera de nouveau de lui-même dès que l'application repassera en production.",
+        "data": {
+          "confirm": "L'utiliser quand même"
+        }
+      }
+    },
+    "error": {
+      "invalid_name": "Saisissez un nom de connexion.",
+      "cannot_connect": "Impossible de se connecter au module complémentaire. Est-il démarré et le port est-il accessible ?",
+      "invalid_auth": "Le module complémentaire a refusé le jeton d'API.",
+      "unknown": "Erreur inattendue."
+    },
+    "abort": {
+      "reconfigure_successful": "Connexion mise à jour.",
+      "reauth_successful": "Nouveau jeton enregistré.",
+      "demo_mode_reauth_cancelled": "Annulé — le jeton précédent reste inchangé."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Zeitarchiv – Paramètres",
+        "description": "Utilisez des étiquettes pour choisir ce que Zeitarchiv enregistre, ou transférez les filtres en toute sécurité entre des systèmes Home Assistant.",
+        "menu_options": {
+          "filters": "Modifier les filtres d'archivage",
+          "overview": "Entités actuellement incluses",
+          "export": "Exporter les filtres en YAML",
+          "import": "Importer les filtres depuis YAML"
+        },
+        "menu_option_descriptions": {
+          "filters": "Privilégiez les étiquettes ; les autres méthodes de sélection et les exclusions sont facultatives.",
+          "overview": "Examinez les entités incluses, sans état actuel et exclues.",
+          "export": "Copiez les filtres actuels sans l'hôte ni le jeton d'API.",
+          "import": "Chargez un export Zeitarchiv et remplacez les filtres actuels."
+        }
+      },
+      "filters": {
+        "title": "Zeitarchiv – Filtres d'archivage",
+        "description": "Les étiquettes constituent la méthode de sélection recommandée. Les entités étiquetées directement et les entités appartenant à des appareils étiquetés ou à des zones étiquetées sont incluses. Plusieurs étiquettes sont combinées avec une logique OU ; les modifications ultérieures des étiquettes s'appliquent aux changements d'état suivants sans qu'il soit nécessaire d'enregistrer à nouveau les options. Configurez la résolution et la conservation dans Zeitarchiv lui-même (Paramètres → Archivage).",
+        "data": {
+          "labels": "Étiquettes (recommandées)"
+        },
+        "data_description": {
+          "labels": "Une étiquette peut être attribuée directement à une entité, un appareil ou une zone. Les exclusions ont toujours la priorité."
+        },
+        "sections": {
+          "additional_selection": {
+            "name": "Méthodes de sélection supplémentaires",
+            "description": "Incluez éventuellement des entités individuelles, des zones, des appareils ou des motifs.",
+            "data": {
+              "entities": "Entités individuelles",
+              "areas": "Zones",
+              "devices": "Appareils",
+              "entity_patterns": "Motifs d'entités à inclure"
+            },
+            "data_description": {
+              "entity_patterns": "Un motif par ligne. Les motifs sans point correspondent à l'ID d'objet (`*_power`), les motifs avec un point à l'ID d'entité complet (`sensor.weather_*`). `*` et `?` sont pris en charge."
+            }
+          },
+          "exclusions": {
+            "name": "Exclusions",
+            "description": "Les exceptions s'appliquent quel que soit le mode de sélection d'une entité.",
+            "data": {
+              "exclude_entities": "Entités exclues",
+              "exclude_entity_patterns": "Motifs d'entités à exclure"
+            },
+            "data_description": {
+              "exclude_entity_patterns": "Un motif par ligne. Les exclusions ont toujours la priorité, par exemple `*_id` ou `sensor.*_raw`."
+            }
+          },
+          "value_processing": {
+            "name": "Traitement des valeurs",
+            "description": "Détermine comment les mesures numériques sont préparées avant la transmission.",
+            "data": {
+              "decimal_places": "Décimales"
+            },
+            "data_description": {
+              "decimal_places": "Les mesures numériques sont arrondies avant la transmission ; vous pouvez choisir entre 0 et 3 décimales. Recommandé : 3 (par défaut). Moins de décimales peuvent économiser de l'espace de stockage, mais réduire la précision des mesures fines. Les états des interrupteurs sont enregistrés en 1/0 indépendamment de ce réglage."
+            }
+          }
+        }
+      },
+      "filter_preview": {
+        "title": "Zeitarchiv – Aperçu des filtres",
+        "description": "La sélection a été évaluée par rapport aux entités actuellement connues. Étiquettes sélectionnées : **{label_count}**. Les appareils et zones étiquetés apparaissent avec leurs ID d'entité associés.\n\n**Traitement des valeurs :** les mesures numériques sont arrondies à **{decimal_places}** décimale(s) au maximum avant la transmission. Les états des interrupteurs sont enregistrés en **1/0**.\n\n**Sélectionnées par le filtre : {current_count}** ({domain_summary})\n\n{current_entities}\n\n**Enregistrées sans état actuel : {without_state_count}**\n\n{without_state_entities}\n\n**Supprimées par les exclusions : {excluded_count}**\n\n{excluded_entities}\n\n{limit_note}\n\nSélectionnez **Valider** pour enregistrer ces filtres."
+      },
+      "overview": {
+        "title": "Zeitarchiv – Entités actuellement incluses",
+        "description": "Cet aperçu évalue les filtres enregistrés par rapport aux entités actuellement connues. Étiquettes sélectionnées : **{label_count}**.\n\n**Traitement des valeurs :** les mesures numériques sont arrondies à **{decimal_places}** décimale(s) au maximum avant la transmission. Les états des interrupteurs sont enregistrés en **1/0**.\n\n**Sélectionnées par le filtre : {current_count}** ({domain_summary})\n\n{current_entities}\n\n**Enregistrées sans état actuel : {without_state_count}**\n\n{without_state_entities}\n\n**Supprimées par les exclusions : {excluded_count}**\n\n{excluded_entities}\n\n{limit_note}\n\nSélectionnez **Valider** pour revenir aux paramètres ; aucun filtre n'est modifié."
+      },
+      "export": {
+        "title": "Zeitarchiv – Exporter les filtres",
+        "description": "Copiez le contenu YAML et enregistrez-le dans un fichier, ou collez-le dans « Importer les filtres depuis YAML » sur un autre système. L'hôte et le jeton d'API ne sont pas inclus. Notez que les étiquettes, les zones et les appareils utilisent des ID internes. Sélectionnez « Valider » pour revenir au menu.",
+        "data": {
+          "yaml_config": "Configuration YAML"
+        }
+      },
+      "import": {
+        "title": "Zeitarchiv – Importer les filtres",
+        "description": "Collez un document YAML Zeitarchiv précédemment exporté. L'importation remplace tous les filtres actuels. Les étiquettes, les zones et les appareils ne fonctionnent que si leurs ID internes correspondent sur ce système. Les domaines des anciens exports sont convertis une seule fois en entités réelles actuellement connues.",
+        "data": {
+          "yaml_config": "Configuration YAML"
+        }
+      }
+    },
+    "error": {
+      "invalid_yaml": "La syntaxe YAML n'est pas valide.",
+      "invalid_structure": "Le contenu n'est pas un export de filtres Zeitarchiv valide.",
+      "unsupported_format": "Ce format ou cette version d'export n'est pas pris en charge.",
+      "invalid_domain": "L'export contient un domaine non pris en charge.",
+      "invalid_entity": "L'export contient un ID d'entité non valide.",
+      "invalid_pattern": "Le motif n'est pas valide. Les caractères des ID d'entité ainsi que * et ? sont autorisés.",
+      "too_many_patterns": "Chaque champ de motif accepte au maximum 100 entrées."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "last_success": {
+        "name": "Dernière transmission"
+      },
+      "queue_size": {
+        "name": "File d'attente"
+      },
+      "sent_count": {
+        "name": "Enregistrements transmis (depuis le démarrage)"
+      },
+      "dropped_count": {
+        "name": "Événements abandonnés (depuis le démarrage)"
+      },
+      "latest_backup": {
+        "name": "Dernière sauvegarde"
+      },
+      "mode": {
+        "name": "Mode de fonctionnement",
+        "state": {
+          "produktiv": "Production",
+          "demo": "Mode démo"
+        }
+      }
+    },
+    "binary_sensor": {
+      "backup_failed": {
+        "name": "Échec de la sauvegarde"
+      },
+      "entities_inactive": {
+        "name": "Entités inactives"
+      },
+      "health_issue": {
+        "name": "Avis de maintenance"
+      }
+    }
+  },
+  "issues": {
+    "backup_job_failed": {
+      "title": "Échec de la sauvegarde Zeitarchiv",
+      "description": "La dernière exécution de sauvegarde pour « {connection} » a échoué : {detail}\n\nConsultez l'application Zeitarchiv (Paramètres → Sauvegarde) pour plus de détails et les étapes suivantes."
+    },
+    "retention_job_failed": {
+      "title": "Échec de la conservation Zeitarchiv",
+      "description": "La dernière conservation pour « {connection} » a échoué : {detail}\n\nConsultez l'application Zeitarchiv (Paramètres → Archivage) pour plus de détails."
+    },
+    "housekeeping_inactive_entities_error": {
+      "title": "Zeitarchiv : entités inactives depuis un certain temps",
+      "description": "Une ou plusieurs entités pour « {connection} » n'ont pas transmis de valeur depuis plusieurs jours : {detail}\n\nConsultez l'application Zeitarchiv pour plus de détails."
+    },
+    "integration_outdated": {
+      "title": "Intégration Zeitarchiv obsolète",
+      "description": "La connexion « {connection} » signale une version obsolète de l'intégration : {detail}\n\nVeuillez mettre à jour via HACS ou manuellement."
+    },
+    "housekeeping_host_disk_space_low": {
+      "title": "Espace disque de l'hôte faible",
+      "description": "L'espace disque libre sur le système de fichiers de l'hôte est faible pour « {connection} » : {detail}\n\nConsultez l'application Zeitarchiv (Paramètres → Housekeeping) pour plus de détails."
+    },
+    "demo_mode_paused": {
+      "title": "Connexion Zeitarchiv en pause",
+      "description": "La connexion « {connection} » n'envoie rien pour le moment car l'application fonctionne en mode démo — il ne s'agit pas d'un problème de jeton. Elle reprendra d'elle-même dès que l'application repassera en production."
+    }
+  }
+}
